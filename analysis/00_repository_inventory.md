@@ -17,8 +17,8 @@
 |---|---|---|---|
 | Source files | Inspected (آلياً)/ جزئياً يدوياً | `src/` 1082 ملف: tsx 796 + ts 427 (إجمالي المستودع) | أكبر: `components` 395 ملف/94K سطر، `pages` 402 ملف/106K سطر |
 | Configuration | Inspected | `vite.config.mts`, `tsconfig.json`, `eslint.config.mjs`, `care.config.ts`, `tailwind.config.js`, `knip.json`, `components.json` | |
-| Tests | Identified, **not run** (E2E) | `tests/` 150 ملف، 109 `*.spec.ts` + 1 unit test | E2E تحتاج Backend |
-| Database definitions | **غير موجودة** | لا migrations/ORM/SQL | Backend خارج النطاق |
+| Tests | Executed (E2E) | `tests/` 150 ملف، 109 `*.spec.ts` + 1 unit test | 379/413 نجحت محلياً (انظر 09 §6) |
+| Database definitions | **غير موجودة في هذا المستودع** | لا migrations/ORM/SQL | موجودة في `husam713/care` (انظر `backend/B02`) |
 | API definitions | Inspected (آلياً) | 65 ملف `src/**/*Api.ts` = 422 تعريف | العقد على جهة العميل فقط |
 | Deployment files | Inspected | `Dockerfile`, `nginx/nginx.conf`, `.github/workflows/*` (32 ملف) | لا docker-compose ولا IaC |
 | Documentation | Inspected (جزئياً) | `README.md`, `docs/*.md` (7), `AGENTS.md`, `CLAUDE.md`, `UPGRADING.md` | |

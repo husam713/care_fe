@@ -66,6 +66,9 @@
 ## 5ب. المرحلة الثانية: الـ Backend (`analysis/backend/`)
 المستودع: `husam713/care` @`67a4618` (shallow، قراءة فقط). التقارير: `B00` نظرة عامة، `B01` المصادقة والتفويض والعزل (وحسم S-03)، `B02` قاعدة البيانات، `B03` API والأمن والجودة والعمليات. لم تُشغَّل اختبارات الـ Backend. أبرز النتائج: B-01 SECRET_KEY افتراضي، B-06 تفويض opt-in.
 
+## 5ج. خطة التعريب
+`16_arabic_localization_plan.md`: قياسات فعلية (6856 مفتاحاً، ≈ 1,800 استخدام CSS فيزيائي، لا RTL) وحزم عمل AR-1..AR-10 وقرارات مطلوبة. التنفيذ لم يبدأ.
+
 ## 6. حالة الحزمة النهائية
 - مُنتَجة: 00–15، `diagrams/` (system_context, architecture, request_lifecycle, authentication, integrations, deployment)، `evidence/` (source_inventory, feature_traceability, api_inventory + raw tsv, findings_register, unresolved_questions, routes_all).
 - غير مُنتَجة عمداً: `database_erd.mmd` (لا DB في المستودع)، `components.mmd`، `data_flow.mmd` (مؤجلة).
