@@ -7,8 +7,8 @@
 | Lint | `npx eslint ./src --quiet` ثم تقرير JSON كامل بـ `NODE_OPTIONS=--max-old-space-size=8192` | **0 أخطاء، 370 تحذيراً** في 1062 ملفاً | المحاولة الأولى بالذاكرة الافتراضية انهارت (exit 134)؛ نجحت بـ 8GB. أعلى القواعد: `react-hooks/set-state-in-effect` 119، `no-explicit-any` 80، `react-hooks/exhaustive-deps` 60، `react-hooks/incompatible-library` 36، `i18next/no-literal-string` 31، `react-hooks/refs` 17 |
 | Dead code | `npx knip` | exit 0 | تلميح واحد: `@/supportedBrowsers` يمكن إزالته من `ignoreUnresolved` في `knip.json` |
 | Unit tests | `npm run test:unit` | 20/20 نجحت | ملف اختبار واحد فقط، للـ Vite plugin `autoRegisterComponents` |
-| E2E | Playwright | **لم تُنفَّذ** | تحتاج Backend (9000) وبناء إنتاجي |
-| Build | `npm run build` | **لم يُنفَّذ** | |
+| Build | `npm run build` | **نجح (exit 0)**، Vite أنهى البناء في ≈ 15 ثانية، مع تحذير حجم chunks | حجم الحزمة لم يُحلَّل |
+| E2E (Playwright) | `playwright test --project=chromium --workers=4 --retries=1` (مقابل Backend محلي على PostgreSQL، بعد `--project=setup --workers=1`) | **379 نجح، 29 فشل، 5 متذبذبة، 10 لم تعمل** من 413 (18 دقيقة) | انظر §6 |
 | Audit | `npm audit` | 43 ثغرة (انظر 08) | |
 
 ## 2. مؤشرات ساكنة (grep على `src/`)
@@ -40,3 +40,27 @@
 
 ## 5. لم يُقَس
 تغطية الاختبارات (coverage)، الدوائر الاعتمادية (circular imports)، التكرار (duplication)، أداء الحزمة (bundle size).
+## 6. نتائج E2E الفعلية (2026-11-02، بيئة سحابية، Chromium مثبّت مسبقاً)
+
+**الإعداد:** Backend `husam713/care` @67a4618 على PostgreSQL 16 وRedis، بيانات `load_fixtures`، مدد JWT مرفوعة إلى 720 دقيقة (انتهاء التوكنات كان يُفشل التشغيل الأول بعد نحو 30 دقيقة)، واجهة من `npm run build` عبر `vite preview`، وضع `CI=1` (setup بـ worker واحد ثم 4 workers). استُخدم ملف إعداد محلي غير مُلتزَم به يضبط مسار Chromium لأن إصدار Playwright (1.61.1) يتوقع بناءً مختلفاً عن المثبّت.
+
+| النتيجة | العدد |
+|---|---:|
+| setup | 8 / 8 نجحت |
+| نجحت | 379 |
+| فشلت | 29 |
+| متذبذبة (نجحت بعد إعادة) | 5 |
+| لم تعمل | 10 |
+
+**تصنيف الفشل (أولي، لم يُحقَّق يدوياً كل حالة):**
+| الفئة | الملفات | التقدير |
+|---|---|---|
+| بيئي: متصفح | `ServiceRequestCreate.spec.ts` (4) تفشل بـ `browserType.launch: Executable doesn't exist` لأن الاختبار يشغّل متصفحاً بنفسه خارج إعداد المشروع | بيئي (مسار Chromium) |
+| بيئي: تخزين ملفات | `patientFiles` (4)، `userAvatar` (3)، `facilityImage` (2) | يطابق فشل 14 اختبار رفع في الـ Backend (لا bucket/MinIO) |
+| غير محسوم | `DiagnosticReportReview` (7) تنتظر زر `Approve`، و`ServiceRequestReportWorkflow` (2)، `AdditionalReportObservations` (1)، `MultipleDiagnosticReports` (1)، `encounterShortcuts` (2)، وغيرها بمفرده | قد تكون حقيقية أو حساسة للحمل (حمل المعالج وصل ≈ 16 على 4 أنوية) أو لبيانات؛ **تحتاج إعادة تشغيل منفردة** |
+| متذبذبة | `role.spec.ts`، `encounterFutureDateRestriction`، `encounterPlannedStatusTransition`، `enableWhen/boolean`، `observationDefinition` | حساسية للتوقيت والحمل |
+
+**الخلاصة:** ≈ 92% نجاح (379/413) في بيئة محملة ومن دون تخزين ملفات. أقل من نصف حالات الفشل مبررة بيئياً؛ الباقي لم يُصنَّف نهائياً. لا يصح اعتبارها عيوباً في الكود قبل إعادة التشغيل منفردة.
+
+## 7. نتائج اختبارات الـ Backend (Django)
+`python manage.py test --keepdb --parallel 4` بإعدادات `config.settings.test`: **2005 اختبار في 56.6 ثانية، 1991 نجح، 14 فشل** (13 خطأ + فشل واحد). كل الـ14 في رفع الملفات (`test_file_upload_api`، `test_user_api` صور الملف الشخصي، `test_consent_api.test_for_attachments`) بسبب `ValueError: Invalid endpoint:` (لا إعداد bucket/MinIO) ثم خطأ ثانوي في قالب الخطأ (`favicon.ico` غير موجود لأن `collectstatic` لم يُشغَّل). أسباب بيئية لا عيوب كود؛ لم أتحقق بتشغيلها مع MinIO.

@@ -31,7 +31,8 @@
 | نشر | Docker (dev/prod)، ECS scripts (`scripts/*-ecs.sh`)، Coolify compose، Nix flake | `docker/`, `scripts/` |
 | تشغيل | gunicorn، Celery worker + beat، health checks (`healthy-django`, `scripts/healthcheck.sh`)، backup script | `config/gunicorn.py`, `scripts/` |
 | المراقبة | Sentry، تسجيل زمن الطلبات (`RequestTimeLoggingMiddleware`) | `deployment.py`, `config/middlewares.py` |
-| ما لم يُنفَّذ | تشغيل الاختبارات/ruff/`pip-audit` (يتطلب بيئة Python+PG+Redis) | — |
+| نتائج الاختبارات الفعلية | 2005 اختبار: 1991 نجح، 14 فشل (كلها رفع ملفات، سبب بيئي: لا bucket/MinIO) في 56.6 ثانية | تشغيل محلي، انظر `09` §7 |
+| ما لم يُنفَّذ | `ruff` و`pip-audit` | — |
 
 ## 5. خلاصة
 الـ Backend أنضج من حيث نموذج الصلاحيات والتوثيق والاختبارات، وأهم مخاطره **تصميمية** (التفويض opt-in، تجاوز superuser، `SECRET_KEY` افتراضي، staging متساهل) وليست ثغرات مستغلة مثبتة. لا ينبغي نشره دون: ضبط `DJANGO_SECRET_KEY` إلزامياً، ورفع HSTS، وتقييد `ALLOWED_HOSTS`، واختبار آلي يمنع viewset بلا تغطية صلاحيات.

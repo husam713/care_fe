@@ -46,8 +46,9 @@
 | `npx eslint ./src` (JSON كامل) | **0 أخطاء، 370 تحذيراً** (`--quiet` يعطي exit 0) |
 | `npm run test:unit` | 20/20 نجحت (ملف اختبار وحدة واحد: `plugins/autoRegisterComponents.test.ts`) |
 | `npm audit --package-lock-only` | 43 ثغرة (1 critical, 10 high, 28 moderate, 4 low)؛ الإنتاج فقط: 13 (1 critical, 6 high) |
-| Playwright E2E (109 ملف spec) | **لم تُنفَّذ** — تتطلب Backend على المنفذ 9000 + production build |
-| `npm run build` | **لم يُنفَّذ** |
+| Playwright E2E (109 ملف spec، 413 اختباراً) | **نُفِّذت محلياً**: 379 نجح، 29 فشل، 5 متذبذبة، 10 لم تعمل (انظر 09 §6) |
+| اختبارات الـ Backend (Django) | 2005: 1991 نجح، 14 فشل (رفع ملفات، سبب بيئي) (انظر 09 §7) |
+| `npm run build` | **نجح (exit 0)** |
 
 ## 4. مصفوفة الاستكشاف
 - **فُتحت وقُرئت يدوياً (≈35 ملفاً)**: `package.json`, `.env`, `Dockerfile`, `nginx/nginx.conf`, `docs/architecture.md`, `AppRouter.tsx`, `PublicRouter.tsx`, `AuthUserProvider.tsx`, `query.ts`, `utils.ts` (request), `errorHandler.ts`, `queryClient.ts`, `PluginEngine.tsx`, `PermissionContext.tsx`, `Permissions.tsx` (جزئي)، `markdown.tsx`, `AuthHero.tsx` (جزئي)، `BackupCodesDialog.tsx` (جزئي)، `vite.config.mts` (مقاطع)، `care.config.ts` (مقاطع)، مقاطع CI.
