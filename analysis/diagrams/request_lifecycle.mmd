@@ -1,0 +1,20 @@
+sequenceDiagram
+  participant C as Component
+  participant Q as useQuery/useMutation
+  participant A as callApi (Utils/request/query.ts)
+  participant H as makeHeaders (utils.ts)
+  participant S as CARE API (external)
+  participant E as handleHttpError
+  C->>Q: queryFn: query(route, {pathParams, queryParams})
+  Q->>A: callApi(route, opts + AbortSignal)
+  A->>H: build headers (Authorization from localStorage)
+  A->>S: fetch(apiUrl + path)
+  alt res.ok
+    S-->>A: JSON
+    A-->>Q: data
+  else error
+    S-->>A: status + body
+    A-->>Q: throw HTTPError
+    Q->>E: QueryCache/MutationCache onError
+    E-->>C: toast / navigate(/session-expired)
+  end

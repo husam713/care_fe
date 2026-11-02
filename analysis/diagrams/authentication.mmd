@@ -1,0 +1,25 @@
+sequenceDiagram
+  participant U as User
+  participant L as Login UI
+  participant P as AuthUserProvider
+  participant API as CARE API (external)
+  participant LS as localStorage
+  U->>L: username/password (+reCAPTCHA)
+  L->>P: signIn
+  P->>API: auth login
+  alt MFA required (temp_token in response)
+    API-->>P: {temp_token}
+    P->>LS: set mfa_temp_token
+    P-->>U: navigate /2fa?redirect=...
+    U->>P: OTP / backup code
+    P->>API: verify 2FA
+  end
+  API-->>P: {access, refresh}
+  P->>LS: set accessToken, refreshToken
+  P-->>U: navigate(getRedirectOr("/"))  %% same-origin check
+  loop every tokenRefreshInterval
+    P->>API: tokenRefresh(refresh)
+    API-->>P: new {access, refresh}
+    P->>LS: overwrite
+  end
+  Note over P,LS: on refresh error: tokens removed

@@ -1,0 +1,8 @@
+flowchart LR
+  Dev["Developer PR"] --> CI["GitHub Actions: lint(tsc/eslint/knip), unit, playwright, codeql, ossar"]
+  CI --> Build["npm run build -> build/ (+ _headers)"]
+  Build --> Docker["Dockerfile: node22 build -> nginx:alpine"]
+  Build --> Preview["Cloudflare Pages preview"]
+  Docker --> Reg["Container registry (deploy.yaml)"]
+  Reg --> Prod["Host (not in repo)"]
+  Prod -->|"REACT_CARE_API_URL (build-time)"| API["CARE API"]

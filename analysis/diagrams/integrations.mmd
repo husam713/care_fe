@@ -1,0 +1,11 @@
+flowchart LR
+  FE["care_fe"] --> API["CARE API"]
+  API -->|"plug_config list (meta.url)"| FE
+  FE -->|"dynamic import ESM from meta.url"| R1["Remote plugin A"]
+  FE -->|"dynamic import ESM from meta.url"| R2["Remote plugin B"]
+  R1 -. "same origin: can read localStorage JWT" .-> LS[("localStorage")]
+  FE --> Sentry
+  FE --> Recaptcha
+  FE --> OSM
+  FE --> CDN["cdn.ohc.network / S3"]
+  FE --> Registry["care_apps_registry (GitHub raw)"]

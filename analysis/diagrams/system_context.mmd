@@ -1,0 +1,13 @@
+%% System context — الأجزاء المحاطة بـ (unverified) غير موجودة في المستودع
+flowchart LR
+  Staff["Clinical / Admin Staff"] -->|HTTPS| FE["care_fe SPA (verified)"]
+  Patient["Patient (OTP login)"] -->|HTTPS| FE
+  FE -->|REST JSON + Bearer JWT| BE["CARE Backend ohcnetwork/care (unverified)"]
+  BE --> DB[("PostgreSQL / Redis (unverified, من الوثائق)")]
+  BE --> S3[("Object storage S3 (unverified)")]
+  FE -->|errors| Sentry["Sentry"]
+  FE -->|captcha| Recaptcha["Google reCAPTCHA"]
+  FE -->|remote ESM from meta.url| Plugins["Federated plugins (care_scribe_fe, ...)"]
+  FE -->|tiles/geocode| OSM["OSM / Nominatim"]
+  FE -->|sbom| SBOM["sbom.ohc.network"]
+  FE -->|file GET/PUT via signed URL| S3
