@@ -31,7 +31,7 @@
 - **Severity:** Medium (يرتفع إلى High إذا أمكن لمستخدم غير موثوق تعديل `plug_config`) · **Confidence:** Medium
 - **File:** `src/PluginEngine.tsx:25-56` (`z.url()` فقط، ثم `setFederationRemote/getFederationRemote`)
 - **Impact:** تنفيذ JS من أصل خارجي بصلاحيات التطبيق كاملة، بما فيها localStorage.
-- **Verification:** قراءة الكود. من يحق له تعديل `plug_config` = **Unverified (Backend)**.
+- **Verification:** قراءة الكود. **محسوم بعد تحليل الـ Backend:** الكتابة على `plug_config` تتطلب `IsAdminUser` (is_staff)؛ القراءة عامة بلا مصادقة؛ حقل `meta` بلا تحقق من الـ URL (انظر `backend/B01` §4). الخطر إذن = حسابات staff المخترقة/الخبيثة، فيبقى Medium.
 - **Remediation:** allowlist للنطاقات/SRI أو توقيع للـ manifests؛ تقييد صلاحية تعديل التكوين؛ توثيق نموذج الثقة.
 
 ### S-04 — CSP في وضع Report-Only فقط وغير مضمنة في ترويسات الإنتاج المولَّدة
@@ -77,6 +77,9 @@
 - لا `eval`/`new Function` في `src` (grep).
 - `rel="noopener noreferrer"` على الروابط الخارجية المفحوصة في AuthHero.
 - الأسرار: `.env` المُلتزَم به يحوي مفتاح reCAPTCHA **site key** وSentry DSN (`care.config.ts:100`) وكلاهما عامّان بطبيعتهما؛ لم يُرصد سرّ خاص في الملفات المقروءة (بلا ماسح أسرار).
+
+## الـ Backend
+نتائج المرحلة الثانية (B-01..B-11: SECRET_KEY افتراضي، التفويض opt-in، staging متساهل، …) في `backend/B01` و`backend/B03`.
 
 ## ما لم يُفحص
 XSS في بقية المكونات، SSRF (غير ذي صلة بـ SPA)، رفع الملفات (اكتفاء بقراءة `uploadFile.ts` عناوين فقط)، التسجيل (logging) والتدقيق (audit trail)، الموافقة (Consent) والخصوصية، التشفير، حدود الصلاحيات في الخادم.
