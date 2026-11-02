@@ -5,7 +5,7 @@
 3. **هل `husam713/care_fe` fork رسمي؟** علم fork في GitHub لم يُفحص.
 4. **E2E**: تشغيل Playwright مقابل Backend محلي + DB snapshot لقياس نسبة النجاح الفعلية.
 5. **Build**: `npm run build` + تحليل حجم الحزمة (code splitting).
-6. **ESLint warnings**: عدّ التحذيرات (التقرير JSON انهار بسبب الذاكرة؛ جرّب `NODE_OPTIONS=--max-old-space-size=8192` أو تشغيل على مجلدات).
+6. ~~ESLint warnings~~ — حُسمت: 370 تحذيراً (انظر 09).
 7. **Workflows الوكلاء (`*.lock.yml`, `.github/aw`, `.entire`, `.codex`, `.opencode`)**: صلاحيات الرموز، مصادر المدخلات (prompt injection)، أسرار.
 8. **S-01 exploitability**: PoC آمن محلياً على إعداد TemplateBuilder (`WHOLE_DOCUMENT` + shadow DOM).
 9. **Questionnaire/Medication/Billing/Inventory**: قراءة معمّقة (أكبر الملفات) وتتبع كامل لمسار الميزة.

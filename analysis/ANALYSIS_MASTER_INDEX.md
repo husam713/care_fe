@@ -43,7 +43,7 @@
 | `npm ci --ignore-scripts` | نجح (699 مجلداً في node_modules) |
 | `node scripts/generate-supported-browsers.mjs` | لازم قبل typecheck (ملف مُولَّد `src/supportedBrowsers.ts` مُتجاهَل في git) |
 | `npx tsc --noEmit` | **exit 0** (بعد توليد الملف أعلاه؛ قبله خطأ TS2307 واحد) |
-| `npx eslint ./src --quiet` | **exit 0** (أخطاء فقط، بدون تحذيرات) |
+| `npx eslint ./src` (JSON كامل) | **0 أخطاء، 370 تحذيراً** (`--quiet` يعطي exit 0) |
 | `npm run test:unit` | 20/20 نجحت (ملف اختبار وحدة واحد: `plugins/autoRegisterComponents.test.ts`) |
 | `npm audit --package-lock-only` | 43 ثغرة (1 critical, 10 high, 28 moderate, 4 low)؛ الإنتاج فقط: 13 (1 critical, 6 high) |
 | Playwright E2E (109 ملف spec) | **لم تُنفَّذ** — تتطلب Backend على المنفذ 9000 + production build |
