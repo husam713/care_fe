@@ -72,6 +72,9 @@
 ## 5د. خطة هندسة العمل بالذكاء الاصطناعي
 `17_ai_engineering_architecture_plan.md`: **PROPOSAL** للمراجعة (نمط SIRA + Harmonic مكيّف لـ CARE). لا قرارات معتمدة فيها.
 
+## 5هـ. تحليل المستودعات المرجعية
+`19_reference_architecture_analysis.md`: استخراج أنماط من SIRA-Headless وHarmonic، قوالب عامة، تكييف لـ CARE، مقارنة بنى المستودعات، ومراجعة خطة 17. **مقترح للمراجعة، لا قرارات.**
+
 ## 6. حالة الحزمة النهائية
 - مُنتَجة: 00–15، `diagrams/` (system_context, architecture, request_lifecycle, authentication, integrations, deployment)، `evidence/` (source_inventory, feature_traceability, api_inventory + raw tsv, findings_register, unresolved_questions, routes_all).
 - غير مُنتَجة عمداً: `database_erd.mmd` (لا DB في المستودع)، `components.mmd`، `data_flow.mmd` (مؤجلة).
