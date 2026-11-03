@@ -1,0 +1,18 @@
+flowchart TB
+  subgraph Browser["Browser (care_fe)"]
+    Entry["index.tsx / App.tsx"] --> Providers["AuthUserProvider, PatientUserProvider, PermissionProvider"]
+    Providers --> PE["PluginEngine (federation + overrides)"]
+    PE --> Routers{"Router by auth state"}
+    Routers --> Public["PublicRouter"]
+    Routers --> PatientR["PatientRouter"]
+    Routers --> AppR["AppRouter (+ plugin routes)"]
+    AppR --> Pages["pages/* (402 files)"]
+    Pages --> Comps["components/* (395 files) + ui/ (shadcn)"]
+    Comps --> Hooks["hooks/*"]
+    Comps --> Atoms["Jotai atoms / Contexts"]
+    Comps --> RQ["TanStack Query"]
+    RQ --> Req["Utils/request: query/mutate/callApi"]
+    Req --> Types["types/*Api.ts (65 files, 422 routes)"]
+    RQ <--> LS[("localStorage: JWT, persisted queries")]
+  end
+  Req -->|fetch| API["CARE REST API (external)"]
